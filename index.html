@@ -1,0 +1,278 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Privacy Policy for B&BPacs, B&B Hospital Radiology Reporting Service">
+    <meta name="author" content="Ayata Incorporation Private Limited">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="B&BPacs Privacy Policy">
+    <meta name="format-detection" content="telephone=no">
+    <title>B&BPacs Privacy Policy - B&B Hospital</title>
+    <style>
+        body {
+            font-family: памятник Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #fff;
+        }
+        header {
+            background-color: #f28c38;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 4px solid #d96f1e;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        header p {
+            font-size: 1rem;
+            margin: 0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        nav {
+            background-color: #fff;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 2px solid #f28c38;
+        }
+        nav a {
+            margin: 0 1.5rem;
+            text-decoration: none;
+            color: #f28c38;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+        }
+        nav a:hover {
+            color: #d96f1e;
+            text-decoration: underline;
+        }
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+        h1, h2 {
+            color: #f28c38;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid #f28c38;
+            padding-left: 0.5rem;
+        }
+        p, li {
+            margin-bottom: 1rem;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 2rem;
+        }
+        footer {
+            background-color: #f28c38;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            border-top: 4px solid #d96f1e;
+        }
+        footer p {
+            margin: 0.3rem 0;
+        }
+        a {
+            color: #f28c38;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #d96f1e;
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            header p {
+                font-size: 0.9rem;
+            }
+            h2 {
+                font-size: 1.2rem;
+            }
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>B&B</h1>
+        <p>Hospital Pvt. Ltd.</p>
+        <p>Baidya & Banskota</p>
+    </header>
+    <nav>
+        <a href="/privacy-policy" aria-current="page">Privacy Policy</a>
+    </nav>
+    <main>
+        <section>
+            <p><strong>Last Updated: May 16, 2025</strong></p>
+        </section>
+        <section id="introduction">
+            <h2>Introduction</h2>
+            <p>This Privacy Policy explains how B&BPacs, developed by <a href="https://ayata.com.np/">Ayata Incorporation Private Limited</a> ("we", "our", or "us") and used by <a href="https://bbhospital.com.np/">B&B Hospital</a>, collects, uses, shares, and protects your personal information when you use our radiology imaging portal service ("B&BPacs" or the "Service").</p>
+            <p>We are committed to protecting your personal and health information. Please read this Privacy Policy carefully to understand our practices regarding your data and how we will treat it.</p>
+        </section>
+        <section id="information-collection">
+            <h2>Information We Collect</h2>
+            <h3>Personal Information</h3>
+            <p>We collect personal information that you provide directly to us, including:</p>
+            <ul>
+                <li>Full name</li>
+                <li>Date of birth</li>
+                <li>Contact information (email address, phone number, physical address)</li>
+                <li>Government-issued identification numbers</li>
+                <li>Login credentials</li>
+                <li>Emergency contact information</li>
+            </ul>
+            <h3>Health Information</h3>
+            <p>As a medical service provider, we collect health information including:</p>
+            <ul>
+                <li>Medical history</li>
+                <li>Radiology imaging data (X-rays, CT scans, MRIs, ultrasounds, etc.)</li>
+                <li>Diagnosis information</li>
+                <li>Treatment records</li>
+                <li>Laboratory test results related to imaging</li>
+                <li>Physicians' notes and medical reports</li>
+            </ul>
+            <h3>Technical Information</h3>
+            <p>We automatically collect certain information when you use our Service, including:</p>
+            <ul>
+                <li>Device information (type, operating system, browser)</li>
+                <li>IP address</li>
+                <li>Access times and dates</li>
+                <li>Pages viewed within our Service</li>
+                <li>Referring websites</li>
+                <li>Session duration</li>
+            </ul>
+        </section>
+        <section id="information-use">
+            <h2>How We Use Your Information</h2>
+            <p>We use the information we collect to:</p>
+            <ul>
+                <li>Provide you access to your radiology imaging and reports</li>
+                <li>Facilitate communication between you and your healthcare providers</li>
+                <li>Process and complete medical service transactions</li>
+                <li>Send administrative notifications relating to your care</li>
+                <li>Respond to your inquiries and support requests</li>
+                <li>Improve and optimize our Service</li>
+                <li>Protect against fraudulent or unauthorized activity</li>
+                <li>Comply with legal obligations</li>
+            </ul>
+        </section>
+        <section id="information-sharing">
+            <h2>Information Sharing and Disclosure</h2>
+            <p>We may share your information with:</p>
+            <ul>
+                <li><strong>B&B Hospital Healthcare Providers:</strong> Doctors, specialists, and other healthcare professionals involved in your care</li>
+                <li><strong>Service Providers:</strong> Third parties who provide services on our behalf (e.g., hosting providers, analytics services)</li>
+                <li><strong>Legal Requirements:</strong> When required by applicable law, court order, or governmental regulation</li>
+                <li><strong>Business Transfers:</strong> In connection with any merger, sale of company assets, financing, or acquisition of all or a portion of our business</li>
+                <li><strong>With Your Consent:</strong> To other third parties with your explicit consent</li>
+            </ul>
+            <p>We will never sell your personal health information to advertisers or other third parties.</p>
+        </section>
+        <section id="data-security">
+            <h2>Data Security</h2>
+            <p>We implement appropriate technical and organizational security measures to protect your personal and health information from unauthorized access, disclosure, alteration, or destruction. These measures include:</p>
+            <ul>
+                <li>Data encryption during transmission and storage</li>
+                <li>Secure authentication mechanisms</li>
+                <li>Regular security assessments</li>
+                <li>Access controls and monitoring</li>
+                <li>Data backup and recovery procedures</li>
+                <li>Employee training on data privacy and security</li>
+            </ul>
+            <p>While we strive to use commercially acceptable means to protect your information, no method of transmission over the Internet or electronic storage is 100% secure. We cannot guarantee absolute security.</p>
+        </section>
+        <section id="your-rights">
+            <h2>Your Rights and Choices</h2>
+            <p>You have certain rights regarding your personal information, which may include the right to:</p>
+            <ul>
+                <li>Access your personal information</li>
+                <li>Correct inaccurate information</li>
+                <li>Request restriction or object to certain processing of your information</li>
+                <li>Request a copy of your information in a structured, machine-readable format</li>
+            </ul>
+            <p>Please note that due to the nature of medical records and our legal obligations to maintain complete health records, the option to delete your account or completely remove your information is not available.</p>
+        </section>
+        <section id="childrens-privacy">
+            <h2>Children's Privacy</h2>
+            <p>Our Service is not intended for children under the age of 16. We do not knowingly collect personal information from children under 16. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us. If we discover that we have collected personal information from children without verification of parental consent, we will take steps to remove that information from our servers.</p>
+            <p>For patients under 16, access to their radiology images and reports is managed through their parent or legal guardian's account.</p>
+        </section>
+        <section id="policy-changes">
+            <h2>Changes to This Privacy Policy</h2>
+            <p>We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Last Updated" date at the top of this Privacy Policy. We encourage you to review this Privacy Policy periodically to stay informed about how we are protecting your information.</p>
+        </section>
+    </main>
+    <footer>
+        <p>© 2025 <a href="https://bbhospital.com.np/">B&B Hospital Pvt. Ltd.</a> All rights reserved.</p>
+        <p>Baidya & Banskota</p>
+        <p>Developed by <a href="https://ayata.com.np/">Ayata Incorporation Private Limited</a></p>
+    </footer>
+</body>
+</html>
